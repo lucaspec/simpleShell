@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "utils.h"
+#include "tree.h"
 
 #define MAX_INPUT_SIZE 1024
 #define MAX_ARG_SIZE 64
@@ -65,6 +66,46 @@ int executeCommand(char** args) {
 }
 
 int main() {
+    /*--------------------------------- PLAYGROUND START -------------------------------------*/
+
+    struct TreeNode* root = createNode("root", NULL);
+
+    struct TreeNode* child1 = createNode("user", root);
+    struct TreeNode* child2 = createNode("bin", root);
+
+    addChild(root, child1);
+    addChild(root, child2);
+
+    struct TreeNode* child4 = createNode("pics", child1);
+    struct TreeNode* child5 = createNode("vids", child1);
+
+    addChild(child1, child4);
+    addChild(child1, child5);
+
+    // Perform depth-first traversal
+    printf("Depth-first traversal: ");
+    depthFirstTraversal(root);
+    printf("\n");
+
+    struct TreeNode* targetNode = child4;
+    struct TreeNode* parentNode = findParent(root, child4);
+
+    if (parentNode != NULL) {
+        printf("Parent of node %s is %s\n", targetNode->name, parentNode->name);
+    } else {
+        printf("Node %s is the root or not found in the tree\n", targetNode->name);
+    }
+
+    printTree(root, 0);
+
+    // Free the memory allocated for the tree nodes
+    freeTree(root);
+
+    return 0;
+
+    /*--------------------------------- PLAYGROUND END --------------------------------------*/
+
+
     char input[MAX_INPUT_SIZE]; 
     char* args[MAX_ARG_SIZE]; // format: cmd arg1 arg2 arg3...
     
