@@ -16,14 +16,17 @@
 
 void cd(struct TreeNode** current, struct TreeNode* root, char** args) {
     char* arg = args[1];
-    if (strcmp(arg, "..") == 0) {
+    if (arg == NULL) {
+        *current = root;
+    }
+    else if (strcmp(arg, "..") == 0) {
         *current = (*current)->parent;
     } else {
         struct TreeNode* child = childWithNameExists(*current, arg);
         if (child != NULL) {
             *current = child;
         } else {
-            fprintf(stderr, "Directory '%s' doesn't exist\n", arg);
+            fprintf(stderr, "Error: Directory '%s' doesn't exist\n", arg);
         }
     }
 }
@@ -35,6 +38,11 @@ void ls(struct TreeNode* current) {
 
 void mkdir(struct TreeNode** current, char** args) {
     char* arg = args[1];
+
+    if (arg == NULL) {
+        fprintf(stderr, "Error: Missing argument\n");
+        return;
+    }
 
     // Create a new directory and add it as a child
     struct TreeNode* child = createNode(arg, *current);
