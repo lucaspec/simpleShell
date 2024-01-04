@@ -112,7 +112,7 @@ int main() {
     char* args[MAX_ARG_SIZE]; // format: cmd arg1 arg2 arg3...
 
     // Create tree for file system
-    struct TreeNode* root = createNode("root", NULL);
+    struct TreeNode* root = createNode("root", NULL, 1);
     struct TreeNode* current = root;
 
     // TODO: Load tree from a csv/json/yaml file
@@ -146,6 +146,9 @@ int main() {
                 continue;
             } else if (strcmp(args[0], "tree") == 0) {
                 tree(root);
+                continue;
+            } else if (strcmp(args[0], "touch") == 0) {
+                touch(&current, args);
                 continue;
             } else {
                 printf("Command '%s' not found\n", args[0]);

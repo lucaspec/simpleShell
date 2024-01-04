@@ -6,13 +6,14 @@
 /* Implementation of the file system through a tree data structure */
 
 // Function to create a new tree node
-struct TreeNode* createNode(char* name, struct TreeNode* parent) {
+struct TreeNode* createNode(char* name, struct TreeNode* parent, bool isFolder) {
     struct TreeNode* newNode = (struct TreeNode*)malloc(sizeof(struct TreeNode));
     if (newNode != NULL) {
         newNode->name = strdup(name); // Allocate memory for the name and copy it
         newNode->numChildren = 0;
         newNode->children = NULL;
         newNode->parent = parent;
+        newNode->isFolder = isFolder;
     }
     return newNode;
 }

@@ -45,7 +45,7 @@ void mkdir(struct TreeNode** current, char** args) {
     }
 
     // Create a new directory and add it as a child
-    struct TreeNode* child = createNode(arg, *current);
+    struct TreeNode* child = createNode(arg, *current, 1);
     addChild(*current, child);
 }
 
@@ -78,4 +78,28 @@ void pwd(struct TreeNode* current) {
 
 void tree(struct TreeNode* root) {
     printTree(root, 0);
+}
+
+void touch(struct TreeNode** current, char** args) {
+    char* arg = args[1];
+
+    if (arg == NULL) {
+        fprintf(stderr, "Error: Missing argument\n");
+        return;
+    }
+
+    // Create a new file
+    FILE *file;
+    char path[50] = "mnt/";
+    strcat(path, arg); // concatenate string
+    file = fopen(path, "w");
+    if (file == NULL) {
+        fprintf(stderr, "Error: Could not create the file.\n");
+        return;
+    }
+    fclose(file);
+
+    // Create child in tree
+    struct TreeNode* child = createNode(arg, *current, 0);
+    addChild(*current, child);
 }
