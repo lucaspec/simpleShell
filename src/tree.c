@@ -9,7 +9,7 @@
 struct TreeNode* createNode(char* name, struct TreeNode* parent) {
     struct TreeNode* newNode = (struct TreeNode*)malloc(sizeof(struct TreeNode));
     if (newNode != NULL) {
-        newNode->name = name;
+        newNode->name = strdup(name); // Allocate memory for the name and copy it
         newNode->numChildren = 0;
         newNode->children = NULL;
         newNode->parent = parent;
@@ -22,9 +22,7 @@ void addChild(struct TreeNode* parent, struct TreeNode* child) {
     // Check if the name is unique among children
     for (int i = 0; i < parent->numChildren; ++i) {
         if (strcmp(parent->children[i]->name, child->name) == 0) {
-            fprintf(stderr, "Error: Name '%s' is not unique among children.\n", child->name);
-            free(child->name);
-            free(child);
+            fprintf(stderr, "Error: Name '%s' already exists in this directory \n", child->name);
             return;
         }
     }
@@ -78,7 +76,7 @@ struct TreeNode* findParent(struct TreeNode* root, struct TreeNode* node) {
     return NULL; // Node not found in the subtree
 }
 
-// Function to print the tree nodes (for testing purposes)
+// Function to print the tree nodes 
 void printTree(struct TreeNode* root, int depth) {
     if (root == NULL) {
         return;
@@ -93,4 +91,27 @@ void printTree(struct TreeNode* root, int depth) {
     for (int i = 0; i < root->numChildren; ++i) {
         printTree(root->children[i], depth + 1);
     }
+}
+
+// Function to print the children of a given parent
+void printChildren(struct TreeNode* parent) {
+    for (int i = 0; i < parent->numChildren; i++) {
+        printf("%s ", parent->children[i]->name);
+    }
+    printf("\n");
+}
+
+// Function to find a child with a given name among the children of a node
+struct TreeNode* childWithNameExists(struct TreeNode* parent, const char* childName) {
+    if (parent == NULL) {
+        return NULL; // Parent node is NULL
+    }
+
+    for (int i = 0; i < parent->numChildren; ++i) {
+        if (strcmp(parent->children[i]->name, childName) == 0) {
+            return parent->children[i]; // Child with the given name exists
+        }
+    }
+
+    return NULL; // Child with the given name does not exist
 }

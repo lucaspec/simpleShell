@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -I./include
+CFLAGS = -Wall -I./include #-g # for debugging
 
 SRC_DIR = src
 OBJ_DIR = obj

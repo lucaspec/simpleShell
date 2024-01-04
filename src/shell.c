@@ -6,12 +6,15 @@
 #include <sys/wait.h>
 #include "utils.h"
 #include "tree.h"
+#include "file_sys.h"
+
 
 #define MAX_INPUT_SIZE 1024
 #define MAX_ARG_SIZE 64
 
-void readCommand(char* command) {
+void readCommand(char* command, struct TreeNode* current) {
     printf(">> ");
+    pwd(current);
     fgets(command, MAX_INPUT_SIZE, stdin);
 
     // Remove the trailing newline character
@@ -68,12 +71,11 @@ int executeCommand(char** args) {
 int main() {
     /*--------------------------------- PLAYGROUND START -------------------------------------*/
 
-    struct TreeNode* root = createNode("root", NULL);
+    /*struct TreeNode* root = createNode("root", NULL);
 
     struct TreeNode* child1 = createNode("user", root);
-    struct TreeNode* child2 = createNode("bin", root);
-
     addChild(root, child1);
+    struct TreeNode* child2 = createNode("bin", root);
     addChild(root, child2);
 
     struct TreeNode* child4 = createNode("pics", child1);
@@ -97,29 +99,61 @@ int main() {
     }
 
     printTree(root, 0);
+    printChildren(child1);
 
     // Free the memory allocated for the tree nodes
     freeTree(root);
 
-    return 0;
+    return 0;*/
 
     /*--------------------------------- PLAYGROUND END --------------------------------------*/
 
-
     char input[MAX_INPUT_SIZE]; 
     char* args[MAX_ARG_SIZE]; // format: cmd arg1 arg2 arg3...
+
+    // Create tree for file system
+    struct TreeNode* root = createNode("root", NULL);
+    struct TreeNode* current = root;
+
+    // TODO: Load tree from a csv/json/yaml file
     
 
     while (1) {
-        readCommand(input);
+        readCommand(input, current);
 
         if (strcmp(input, "exit") == 0) {
             printf("Exiting the shell. Goodbye!\n");
             break;
         }
 
+    
+
         parseCommand(input, args);
         if (args[0] != NULL) {
+
+            // TODO: make this more elegenat
+            if (strcmp(args[0], "cd") == 0) {
+                cd(&current, root, args);
+                continue;
+            } else if (strcmp(args[0], "ls") == 0) {
+                ls(current);
+                continue;
+            } else if (strcmp(args[0], "mkdir") == 0) {
+                mkdir(&current, args);
+                continue;
+            } else if (strcmp(args[0], "pwd") == 0) {
+                pwd(current);
+                continue;
+            } else if (strcmp(args[0], "tree") == 0) {
+                tree(root);
+                continue;
+            } else {
+                printf("Command '%s' not found\n", args[0]);
+                continue;
+            }
+            
+
+
             int status = executeCommand(args);
             if (status != 0) {
                 fprintf(stderr, "Command failed with exit code %d\n", status);

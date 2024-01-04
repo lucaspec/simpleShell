@@ -15,4 +15,5 @@ void depthFirstTraversal(struct TreeNode* root);
 void freeTree(struct TreeNode* root);
 struct TreeNode* findParent(struct TreeNode* root, struct TreeNode* node);
 void printTree(struct TreeNode* root, int depth);
-
+void printChildren(struct TreeNode* parent);
+struct TreeNode* childWithNameExists(struct TreeNode* parent, const char* childName);
